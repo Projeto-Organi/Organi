@@ -25,8 +25,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/usuarios")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class UsuarioController{
-	
+public class UsuarioController {
+
 	@Autowired
 	private UsuarioService usuarioService;
 
@@ -39,7 +39,7 @@ public class UsuarioController{
 		return ResponseEntity.ok(usuarioRepository.findAll());
 		
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Usuario> getById(@PathVariable Long id) {
 		return usuarioRepository.findById(id)
@@ -55,21 +55,23 @@ public class UsuarioController{
 				.orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
 	}
     
-	@PostMapping("/cadastrar")
-	public ResponseEntity<Usuario> postUsuario(@RequestBody @Valid Usuario email) {
 
-		return usuarioService.cadastrarEmail(email)
+	@PostMapping("/cadastrar")
+	public ResponseEntity<Usuario> postUsuario(@RequestBody @Valid Usuario usuario) {
+
+		return usuarioService.cadastrarUsuario(usuario)
 			.map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(resposta))
 			.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
 
 	}
 
 	@PutMapping("/atualizar")
-	public ResponseEntity<Usuario> putUsuario(@Valid @RequestBody Usuario email) {
+	public ResponseEntity<Usuario> putUsuario(@Valid @RequestBody Usuario usuario) {
 		
-		return usuarioService.atualizarEmail(email)
+		return usuarioService.atualizarUsuario(usuario)
 			.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
 			.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+		
 	}
-	
+
 }

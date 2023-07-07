@@ -8,6 +8,6 @@ import com.generation.organi.model.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 
-	public Optional<Usuario> findByEmail(String email);
+	public Optional<Usuario> findByUsuario(String usuario);
 	
 }
