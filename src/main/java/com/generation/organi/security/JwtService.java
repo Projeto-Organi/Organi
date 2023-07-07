@@ -2,9 +2,10 @@ package com.generation.organi.security;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.HashMap;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -16,52 +17,54 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtService {
-	public static final String SECRET = "1c35c6a352697a8d8c26b82f3f150b6104973c7b08f6beb093ae04bab62451ef";
-			
+
+	public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+
 	private Key getSignKey() {
 		byte[] keyBytes = Decoders.BASE64.decode(SECRET);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
-	
+
 	private Claims extractAllClaims(String token) {
 		return Jwts.parserBuilder()
 				.setSigningKey(getSignKey()).build()
 				.parseClaimsJws(token).getBody();
-		}
+	}
+
 	public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
 		final Claims claims = extractAllClaims(token);
 		return claimsResolver.apply(claims);
 	}
-	
-	public String extractUseremail(String token) {
+
+	public String extractUsername(String token) {
 		return extractClaim(token, Claims::getSubject);
 	}
-	
+
 	public Date extractExpiration(String token) {
 		return extractClaim(token, Claims::getExpiration);
 	}
-	
+
 	private Boolean isTokenExpired(String token) {
 		return extractExpiration(token).before(new Date());
 	}
-	
+
 	public Boolean validateToken(String token, UserDetails userDetails) {
-		final String userEmail = extractUseremail(token);
-		return (userEmail.equals(userDetails.getUsername()) && !isTokenExpired(token)) ;
+		final String username = extractUsername(token);
+		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
-	
-	private String createToken(Map<String, Object> claims, String userEmail) {
+
+	private String createToken(Map<String, Object> claims, String userName) {
 		return Jwts.builder()
-				.setClaims(claims)
-				.setSubject(userEmail)
-				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 ))
-				.signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+					.setClaims(claims)
+					.setSubject(userName)
+					.setIssuedAt(new Date(System.currentTimeMillis()))
+					.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+					.signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
 	}
-	
-	public String generateToken(String userEmail) {
+
+	public String generateToken(String userName) {
 		Map<String, Object> claims = new HashMap<>();
-		return createToken(claims,userEmail);
+		return createToken(claims, userName);
 	}
-	
+
 }
