@@ -2,6 +2,7 @@ package com.generation.organi.security;
 
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private UsuarioRepository usuarioRepository;
 	
 	
-	public UserDetails loadUserByUserEmail(String userEmail) throws UsernameNotFoundException {
+	/* public UserDetails loadUserByUserEmail(String userEmail) throws UsernameNotFoundException {
 		Optional<Usuario> usuario = usuarioRepository.findByEmail(userEmail);
 		
 		if(usuario.isPresent())
@@ -28,12 +29,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		else
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 		
-	}
+	} */
 
 	//Não estamos utilizando, porque foi substituído pela String userEmail
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+	public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+		Optional<Usuario> usuario = usuarioRepository.findByEmail(userEmail);
+		
+		if(usuario.isPresent())
+			return new UserDetailsImpl(usuario.get());
+		else
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 	}
 }
