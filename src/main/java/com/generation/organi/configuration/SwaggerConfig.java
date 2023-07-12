@@ -20,18 +20,18 @@ public class SwaggerConfig {
 		return new OpenAPI()
 				.info(new Info()
 						.title("Projeto Organi")
-						.description("Projeto Organi - Generarion Brasil")
-						.version("v0.0.1")
+						.description("Projeto Organi - Generation Brasil")
+						.version("V 1.0")
 						.license(new License()
 								.name("Organi")
-								.url("https://github.com/Projeto-Organi/Organi"))
+								.url("https://github.com/Projeto-Organi"))
 						.contact(new Contact()
 								.name("Organi")
 								.url("https://github.com/Projeto-Organi/Organi")
-								.email("micael.augustons@hotmail.com")))
+								.email("organi.projetogen@gmail.com")))
 				.externalDocs(new ExternalDocumentation()
 						.description("GitHub")
-						.url("https://github.com/conteudoGeneration"));
+						.url("https://github.com/Projeto-Organi/Documentation"));
 	
 	}
 	
