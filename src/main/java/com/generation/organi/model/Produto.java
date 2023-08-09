@@ -38,6 +38,9 @@ public class Produto {
 	@NotNull(message = "Campo obrigatório")
 	private int quantidade;
 	
+	@NotNull(message = "Campo obrigatório")
+	private String foto;
+	
 	@ManyToOne
 	@JsonIgnoreProperties("produto")
 	private Categoria categoria;
